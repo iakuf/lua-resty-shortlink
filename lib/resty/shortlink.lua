@@ -43,7 +43,21 @@ end
 function _M.create()
     ngx.req.read_body()
     local data = ngx.req.get_body_data()
-    local params = cjson.decode(data)
+    if not data or data == "" then
+        ngx.status = 400
+        ngx.say(cjson.encode({ error = "Request body cannot be empty" }))
+	return
+
+    end
+
+
+    local success, params = pcall(cjson.decode, data)
+
+    if not success then
+        ngx.status = 400
+        ngx.say(cjson.encode({ error = "Invalid JSON" }))
+	return
+    end
 
     if not params.url or not params.expiry then
         ngx.status = 400
