@@ -31,7 +31,7 @@ In your `nginx.conf`:
 http {
     
     init_by_lua_block {
-        local shortlink = require "shortlink"
+        local shortlink = require "resty.shortlink"
         shortlink.init({
             host = "127.0.0.1",
             port = 6379,
@@ -45,14 +45,14 @@ http {
 
         location /create {
             content_by_lua_block {
-                local shortlink = require "shortlink"
+                local shortlink = require "resty.shortlink"
                 shortlink.create()
             }
         }
 
         location /s/ {
             content_by_lua_block {
-                local shortlink = require "shortlink"
+                local shortlink = require "resty.shortlink"
                 shortlink.redirect()
             }
         }
